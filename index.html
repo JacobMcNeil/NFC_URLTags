@@ -27,7 +27,7 @@
     }
 
     .tag {
-      width: 110px;
+      width: 130px;
       padding: 15px;
       background: #2c3e50;
       color: #f1c40f;
@@ -60,49 +60,14 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
     }
-  </style>
-</head>
-<body>
-  <h1>Batman Tag Hunt</h1>
-  <p>Find all 7 hidden bat-tags to complete your mission.</p>
 
-  <div class="tag-list" id="tagList"></div>
-
-  <div id="message"></div>
-  <div id="prize">
-    <strong>Mission Complete</strong><br>
-    Gotham is safe once again.<br>
-    Collect your reward.
-  </div>
-
-  <script>
-    const TAG_IDS = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"];
-    const foundTags = JSON.parse(localStorage.getItem("foundTags") || "[]");
-    const params = new URLSearchParams(window.location.search);
-    const currentTag = params.get("tag");
-
-    if (currentTag && TAG_IDS.includes(currentTag) && !foundTags.includes(currentTag)) {
-      foundTags.push(currentTag);
-      localStorage.setItem("foundTags", JSON.stringify(foundTags));
-    }
-
-    const tagList = document.getElementById("tagList");
-    TAG_IDS.forEach(tagId => {
-      const div = document.createElement("div");
-      div.className = "tag" + (foundTags.includes(tagId) ? " found" : "");
-      div.textContent = foundTags.includes(tagId) ? `✅ ${tagId}` : tagId;
-      tagList.appendChild(div);
-    });
-
-    const message = document.getElementById("message");
-    const prize = document.getElementById("prize");
-
-    if (foundTags.length === TAG_IDS.length) {
-      message.textContent = "All tags found. Well done.";
-      prize.style.display = "block";
-    } else {
-      message.textContent = `Progress: ${foundTags.length} of ${TAG_IDS.length} bat-tags found.`;
-    }
-  </script>
-</body>
-</html>
+    #resetBtn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background
