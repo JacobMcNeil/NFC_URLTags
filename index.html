@@ -1,9 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8" /><title>Test Batman</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <title>Batman Tag Hunt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #121212;
+      color: #f1c40f;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 12px;
+    }
+
+    .tag {
+      width: 130px;
+      padding: 15px;
+      background: #2c3e50;
+      color: #f1c40f;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .found {
+      background: #27ae60;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(39, 174, 96, 0.6);
+    }
+
+    #message {
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #ecf0f1;
+    }
+
+    #prize {
+      display: none;
+      margin-top: 40px;
+      font-size: 1.8em;
+      background: #000;
+      color: #f1c40f;
+      padding: 20px;
+      border: 2px solid #f1c40f;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
+    }
+
+    #resetBtn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #resetBtn:hover {
+      background: #e74c3c;
+    }
+  </style>
+</head>
 <body>
-  <h1>Batman Tag Hunt Test</h1>
-  <button onclick="document.getElementById('scanSound').play()">Play Sound</button>
-  <audio id="scanSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <h1>Batman Tag Hunt</h1>
+  <p>Find all 7 hidden bat-tags to defeat Gotham's villains.</p>
+
+  <div class="tag-list" id="tagList"></div>
+
+  <div id="message"></div>
+  <div id="prize">
+    <strong>Mission Complete</strong><br />
+    You've taken down every villain in Gotham.<br />
+    🎁 Collect your reward.
+  </div>
+
+  <button id="resetBtn">Reset Game</button>
+
+  <script>
+    const TAGS = {
+      tag1: "Joker",
+      tag2: "Riddler",
+      tag3: "Bane",
+      tag4: "Catwoman",
+      tag5: "Penguin",
+      tag6: "Two-Face",
+      tag7: "Scarecrow",
+    };
+
+    let foundTags;
+    try {
+      foundTags = JSON.parse(localStorage.getItem("foundTags")) || [];
+    } catch (e) {
+      console.error("Failed to parse foundTags:", e);
+      foundTags = [];
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const currentTag = params.get("tag");
+
+    if (currentTag && TAGS[currentTag] && !foundTags.includes(currentTag)) {
+      foundTags.push(currentTag);
+      localStorage.setItem("foundTags", JSON.stringify(foundTags));
+    }
+
+    const tagList = document.getElementById("tagList");
+    Object.entries(TAGS).forEach(([tagId, villain]) => {
+      const div = document.createElement("div");
+      const isFound = foundTags.includes(tagId);
+      div.className = "tag" + (isFound ? " found" : "");
+      div.textContent = isFound ? `✅ ${villain}` : villain;
+      tagList.appendChild(div);
+    });
+
+    const message = document.getElementById("message");
+    const prize = document.getElementById("prize");
+
+    if (foundTags.length === Object.keys(TAGS).length) {
+      message.textContent = "You've defeated all the villains!";
+      prize.style.display = "block";
+    } else {
+      message.textContent = `Progress: ${foundTags.length} of ${Object.keys(TAGS).length} villains captured.`;
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      localStorage.removeItem("foundTags");
+      window.location.reload();
+    });
+  </script>
 </body>
 </html>
