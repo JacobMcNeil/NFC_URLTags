@@ -2,59 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NFC Tag Hunt Game</title>
+  <title>Batman Tag Hunt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 30px; }
-    h1 { color: #2c3e50; }
-    .tag-list { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px; }
-    .tag { width: 100px; padding: 10px; border-radius: 8px; background: #eee; color: #333; }
-    .found { background: #2ecc71; color: white; }
-    #message { font-size: 1.5em; margin-top: 30px; color: #e67e22; }
-    #prize { font-size: 2em; color: gold; margin-top: 20px; display: none; }
-  </style>
-</head>
-<body>
-  <h1>NFC Tag Hunt</h1>
-  <p>Scan all 7 hidden NFC tags to win!</p>
-
-  <div class="tag-list" id="tagList">
-    <!-- tags will be generated here -->
-  </div>
-
-  <div id="message"></div>
-  <div id="prize">🎉 You found all the tags! Claim your prize! 🎁</div>
-
-  <script>
-    const TAG_IDS = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"];
-    const foundTags = JSON.parse(localStorage.getItem("foundTags") || "[]");
-    const params = new URLSearchParams(window.location.search);
-    const currentTag = params.get("tag");
-
-    // If a valid tag is scanned, mark it found
-    if (currentTag && TAG_IDS.includes(currentTag) && !foundTags.includes(currentTag)) {
-      foundTags.push(currentTag);
-      localStorage.setItem("foundTags", JSON.stringify(foundTags));
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #121212;
+      color: #f1c40f;
+      text-align: center;
+      padding: 40px 20px;
     }
 
-    // Display tags and which are found
-    const tagList = document.getElementById("tagList");
-    TAG_IDS.forEach(tagId => {
-      const div = document.createElement("div");
-      div.className = "tag" + (foundTags.includes(tagId) ? " found" : "");
-      div.textContent = foundTags.includes(tagId) ? `✅ ${tagId}` : tagId;
-      tagList.appendChild(div);
-    });
-
-    // Show progress message or prize
-    const message = document.getElementById("message");
-    const prize = document.getElementById("prize");
-
-    if (foundTags.length === TAG_IDS.length) {
-      message.textContent = "All tags found!";
-      prize.style.display = "block";
-    } else {
-      message.textContent = `You have found ${foundTags.length} of ${TAG_IDS.length} tags.`;
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
     }
-  </script>
-</body>
-</html>
+
+    .bat-icon {
+      font-size: 4em;
+      color: #f1c40f;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 12px;
+    }
+
+    .tag {
+      width: 110px;
+      padding: 15px;
+      background: #2c3e50;
+      color: #f1c40f;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .found {
+      background: #27ae60;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(39, 174, 96, 0.6);
+    }
