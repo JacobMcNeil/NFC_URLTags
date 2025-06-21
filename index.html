@@ -37,4 +37,132 @@
       border: 2px solid #444;
       border-radius: 10px;
       text-align: center;
-      font
+      font-size: 1em;
+      opacity: 0.6;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .villain.found {
+      background: #0f0;
+      color: black;
+      font-weight: bold;
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .complete {
+      text-align: center;
+      font-size: 1.5em;
+      background: #ff0;
+      color: black;
+      margin: 20px auto;
+      padding: 10px 20px;
+      border-radius: 12px;
+      max-width: 300px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .toggle-container input {
+      margin-left: 10px;
+      transform: scale(1.5);
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Batman Tag Hunt</h1>
+
+  <div class="villain-list" id="villainList"></div>
+
+  <div id="completeMessage" class="complete" style="display:none;">
+    🦇 Mission Complete! You've found all the villains!
+  </div>
+
+  <div class="controls">
+    <div class="toggle-container">
+      <label for="autoclose">Auto-close old tabs?</label>
+      <input type="checkbox" id="autoclose" checked />
+    </div>
+    <button id="resetButton">Reset Progress</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const villains = [
+        { id: 'tag1', name: 'Joker' },
+        { id: 'tag2', name: 'Penguin' },
+        { id: 'tag3', name: 'Riddler' },
+        { id: 'tag4', name: 'Two-Face' },
+        { id: 'tag5', name: 'Poison Ivy' },
+        { id: 'tag6', name: 'Scarecrow' },
+        { id: 'tag7', name: 'Bane' }
+      ];
+
+      const scanned = JSON.parse(localStorage.getItem('scannedTags') || '[]');
+      const params = new URLSearchParams(window.location.search);
+      const newTag = params.get('tag');
+      if (newTag && !scanned.includes(newTag)) {
+        scanned.push(newTag);
+        localStorage.setItem('scannedTags', JSON.stringify(scanned));
+      }
+
+      const villainList = document.getElementById('villainList');
+      villains.forEach(v => {
+        const div = document.createElement('div');
+        div.className = 'villain' + (scanned.includes(v.id) ? ' found' : '');
+        div.textContent = v.name;
+        villainList.appendChild(div);
+      });
+
+      if (scanned.length === villains.length) {
+        document.getElementById('completeMessage').style.display = 'block';
+      }
+
+      document.getElementById("resetButton").onclick = function () {
+        localStorage.removeItem('scannedTags');
+        location.href = location.origin + location.pathname;
+      };
+
+      // === Auto-close logic (inside DOMContentLoaded) ===
+      const bc = new BroadcastChannel("batman-game");
+      const myId = Math.random().toString(36).substring(2);
+      const autoCloseCheckbox = document.getElementById('autoclose');
+      localStorage.setItem('activeTabId', myId);
+
+      bc.postMessage({ type: "new-tab", id: myId });
+
+      bc.onmessage = (event) => {
+        const msg = event.data;
+        if (msg.type === "new-tab" && msg.id !== myId && autoCloseCheckbox?.checked) {
+          document.body.innerHTML = "<p style='color:white; font-size:1.5em;'>A new tab has taken over. Closing this one...</p>";
+          setTimeout(() => window.close(), 1000);
+        }
+      };
+    });
+  </script>
+</body>
+</html>
