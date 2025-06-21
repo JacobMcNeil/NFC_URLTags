@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Batman Tag Hunt - Dual Mode</title>
+  <title>Batman Tag Hunt - Riddler Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -20,99 +20,100 @@
 
     h1 {
       font-size: 3em;
-      margin-bottom: 5px;
-      line-height: 1.1;
-    }
-
-    p.description {
-      font-size: 1.2em;
-      max-width: 90vw;
-      margin: 0 auto 20px;
-    }
-
-    .mode-toggle {
-      margin-bottom: 30px;
-    }
-
-    button#toggleMode {
-      background: #f1c40f;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      color: black;
-      font-size: 1em;
-      box-shadow: 0 0 10px #f1c40f;
-      transition: background 0.3s ease;
-    }
-
-    button#toggleMode:hover {
-      background: #d4ac0d;
+      margin-bottom: 10px;
     }
 
     .tag-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
+      gap: 20px;
       max-width: 95vw;
       margin-bottom: 30px;
     }
 
     .tag {
-      flex: 1 1 40vw;
-      max-width: 180px;
-      min-width: 140px;
-      padding: 25px;
-      font-size: 1.2em;
-      border-radius: 14px;
-      box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
-      transition: all 0.3s ease;
       background: #2c3e50;
       color: #f1c40f;
-      white-space: pre-line;
-      min-height: 100px;
+      border-radius: 14px;
+      box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
+      padding: 20px;
+      max-width: 260px;
+      min-width: 200px;
+      text-align: left;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .found {
       background: #27ae60;
-      color: #ffffff;
+      color: #fff;
       box-shadow: 0 0 18px rgba(39, 174, 96, 0.8);
+    }
+
+    .riddle-text {
+      font-weight: bold;
+      font-size: 1.1em;
+      min-height: 60px;
+    }
+
+    input.guess-input {
+      padding: 8px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button.check-btn {
+      background: #f1c40f;
+      border: none;
+      padding: 8px 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: #121212;
+    }
+
+    button.check-btn:hover {
+      background: #d4ac0d;
+    }
+
+    .feedback {
+      font-style: italic;
+      min-height: 24px;
+      margin-top: 5px;
     }
 
     #message {
       font-size: 1.4em;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       max-width: 90vw;
-      min-height: 2.5em;
     }
 
     #prize {
       font-size: 2em;
-      padding: 25px;
+      padding: 20px;
       border-radius: 16px;
       max-width: 90vw;
       margin-bottom: 25px;
-      display: none;
       background: #000;
       color: #f1c40f;
       border: 2px solid #f1c40f;
       box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
+      display: none;
     }
 
     #resetBtn {
-      font-size: 1.4em;
-      padding: 15px 30px;
+      font-size: 1.3em;
+      padding: 12px 28px;
       border-radius: 12px;
-      max-width: 90vw;
-      cursor: pointer;
       background: #c0392b;
       color: white;
       border: none;
+      cursor: pointer;
       transition: background 0.3s;
     }
 
@@ -120,185 +121,161 @@
       background: #e74c3c;
     }
 
-    @media (min-width: 768px) {
-      body {
-        padding: 40px 60px;
-      }
-      .tag {
-        flex: 1 1 130px;
-        max-width: 130px;
-        min-width: 120px;
-        padding: 15px;
-        font-size: 1em;
-        min-height: 120px;
-      }
-    }
   </style>
 </head>
 <body>
-  <h1>Batman Tag Hunt</h1>
-  <p class="description" id="descriptionText">Find all 7 hidden bat-tags to defeat Gotham's villains.</p>
-
-  <div class="mode-toggle">
-    <button id="toggleMode" aria-pressed="false">Switch to Riddler Mode</button>
-  </div>
+  <h1>Batman Tag Hunt - Riddler Mode</h1>
+  <p>Find all 7 riddles left by the Riddler and solve them to win!</p>
 
   <div class="tag-list" id="tagList"></div>
 
   <div id="message"></div>
   <div id="prize">
     <strong>Mission Complete</strong><br />
-    You've completed the challenge!<br />
-    🎁 Collect your reward.
+    You've solved all the Riddler’s puzzles! 🎉
   </div>
 
   <button id="resetBtn">Reset Game</button>
 
-  <script>
-    const VILLAIN_TAGS = {
-      tag1: "Joker",
-      tag2: "Riddler",
-      tag3: "Bane",
-      tag4: "Catwoman",
-      tag5: "Penguin",
-      tag6: "Two-Face",
-      tag7: "Scarecrow",
-    };
-
-    const RIDDLER_TAGS = {
-      tag1: "I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?",
-      tag2: "I’m tall when I’m young, and I’m short when I’m old. What am I?",
-      tag3: "The more you take, the more you leave behind. What am I?",
-      tag4: "What has hands but can’t clap?",
-      tag5: "I have cities but no houses, forests but no trees, and rivers but no water. What am I?",
-      tag6: "What can fill a room but takes up no space?",
-      tag7: "I’m light as a feather, yet the strongest man can’t hold me for much longer than a minute. What am I?"
-    };
-
-    // Keys for localStorage based on mode
-    const STORAGE_KEYS = {
-      villains: "foundVillains",
-      riddles: "foundRiddles",
-      mode: "batmanTagMode",
-    };
-
-    // Elements
-    const tagList = document.getElementById("tagList");
-    const message = document.getElementById("message");
-    const prize = document.getElementById("prize");
-    const resetBtn = document.getElementById("resetBtn");
-    const toggleModeBtn = document.getElementById("toggleMode");
-    const descriptionText = document.getElementById("descriptionText");
-
-    // Current mode: 'villains' or 'riddles'
-    let mode = localStorage.getItem(STORAGE_KEYS.mode) || "villains";
-
-    // Load progress based on mode
-    function loadProgress() {
-      try {
-        const saved = localStorage.getItem(mode === "villains" ? STORAGE_KEYS.villains : STORAGE_KEYS.riddles);
-        return saved ? JSON.parse(saved) : [];
-      } catch {
-        return [];
-      }
+<script>
+  const TAGS = {
+    tag1: {
+      riddle: "I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?",
+      answer: "echo"
+    },
+    tag2: {
+      riddle: "I’m tall when I’m young, and I’m short when I’m old. What am I?",
+      answer: "candle"
+    },
+    tag3: {
+      riddle: "The more you take, the more you leave behind. What am I?",
+      answer: "footsteps"
+    },
+    tag4: {
+      riddle: "What has hands but can’t clap?",
+      answer: "clock"
+    },
+    tag5: {
+      riddle: "I have cities but no houses, forests but no trees, and rivers but no water. What am I?",
+      answer: "map"
+    },
+    tag6: {
+      riddle: "What can fill a room but takes up no space?",
+      answer: "light"
+    },
+    tag7: {
+      riddle: "I’m light as a feather, yet the strongest man can’t hold me for much longer than a minute. What am I?",
+      answer: "breath"
     }
+  };
 
-    // Save progress based on mode
-    function saveProgress(found) {
-      localStorage.setItem(mode === "villains" ? STORAGE_KEYS.villains : STORAGE_KEYS.riddles, JSON.stringify(found));
-    }
+  const STORAGE_KEY = "foundRiddles";
+  let foundTags;
+  try {
+    foundTags = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch {
+    foundTags = {};
+  }
 
-    // Get tags data based on mode
-    function getTagsData() {
-      return mode === "villains" ? VILLAIN_TAGS : RIDDLER_TAGS;
-    }
+  // Get current tag from URL
+  const params = new URLSearchParams(window.location.search);
+  const currentTag = params.get("tag");
 
-    // Render the tags list
-    function renderTags(foundTags) {
-      const tagsData = getTagsData();
-      tagList.innerHTML = "";
-      Object.entries(tagsData).forEach(([tagId, text]) => {
-        const div = document.createElement("div");
-        const isFound = foundTags.includes(tagId);
-        div.className = "tag" + (isFound ? " found" : "");
-        div.textContent = isFound ? (mode === "villains" ? `✅ ${text}` : text) : (mode === "villains" ? text : "❓ Riddle hidden");
-        tagList.appendChild(div);
+  // Add tag if valid
+  if (currentTag && TAGS[currentTag] && !(currentTag in foundTags)) {
+    foundTags[currentTag] = { solved: false };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(foundTags));
+  }
+
+  const tagList = document.getElementById("tagList");
+  const message = document.getElementById("message");
+  const prize = document.getElementById("prize");
+
+  function createTagElement(tagId, data) {
+    const div = document.createElement("div");
+    div.className = "tag";
+    if (foundTags[tagId]) div.classList.add("found");
+
+    const riddleP = document.createElement("p");
+    riddleP.className = "riddle-text";
+    riddleP.textContent = foundTags[tagId] ? data.riddle : "❓ Riddle hidden";
+
+    div.appendChild(riddleP);
+
+    if (foundTags[tagId]) {
+      // Create input and check button
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "Enter your guess";
+      input.className = "guess-input";
+      input.disabled = foundTags[tagId].solved;
+
+      const feedback = document.createElement("div");
+      feedback.className = "feedback";
+
+      const button = document.createElement("button");
+      button.className = "check-btn";
+      button.textContent = foundTags[tagId].solved ? "Solved" : "Check";
+
+      button.disabled = foundTags[tagId].solved;
+
+      button.addEventListener("click", () => {
+        const guess = input.value.trim().toLowerCase();
+        if (!guess) {
+          feedback.textContent = "Please enter a guess.";
+          feedback.style.color = "#f1c40f";
+          return;
+        }
+        if (guess === data.answer.toLowerCase()) {
+          feedback.textContent = "Correct! 🎉";
+          feedback.style.color = "#27ae60";
+          foundTags[tagId].solved = true;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(foundTags));
+          input.disabled = true;
+          button.disabled = true;
+          button.textContent = "Solved";
+          updateMessageAndPrize();
+        } else {
+          feedback.textContent = "Incorrect, try again.";
+          feedback.style.color = "#e74c3c";
+        }
       });
+
+      div.appendChild(input);
+      div.appendChild(button);
+      div.appendChild(feedback);
     }
 
-    // Update messages and prize display
-    function updateMessages(foundTags) {
-      const total = Object.keys(getTagsData()).length;
-      if (foundTags.length === total) {
-        message.textContent = mode === "villains"
-          ? "You've defeated all the villains!"
-          : "You've solved all the riddles!";
-        prize.style.display = "block";
-      } else {
-        message.textContent = mode === "villains"
-          ? `Progress: ${foundTags.length} of ${total} villains captured.`
-          : `Progress: ${foundTags.length} of ${total} riddles solved.`;
-        prize.style.display = "none";
-      }
+    return div;
+  }
+
+  function updateMessageAndPrize() {
+    const total = Object.keys(TAGS).length;
+    const solvedCount = Object.values(foundTags).filter(t => t.solved).length;
+
+    if (solvedCount === total) {
+      message.textContent = "You've solved all the riddles!";
+      prize.style.display = "block";
+    } else {
+      message.textContent = `Progress: ${solvedCount} of ${total} riddles solved.`;
+      prize.style.display = "none";
     }
+  }
 
-    // Handle a scanned tag
-    function handleScannedTag(tagId, foundTags) {
-      if (!foundTags.includes(tagId) && Object.keys(getTagsData()).includes(tagId)) {
-        foundTags.push(tagId);
-        saveProgress(foundTags);
-      }
-    }
-
-    // Initialize the game state & UI
-    function init() {
-      // Set description and toggle button text based on mode
-      if (mode === "villains") {
-        descriptionText.textContent = "Find all 7 hidden bat-tags to defeat Gotham's villains.";
-        toggleModeBtn.textContent = "Switch to Riddler Mode";
-        toggleModeBtn.setAttribute("aria-pressed", "false");
-      } else {
-        descriptionText.textContent = "Solve all 7 riddles left by the Riddler.";
-        toggleModeBtn.textContent = "Switch to Villains Mode";
-        toggleModeBtn.setAttribute("aria-pressed", "true");
-      }
-
-      // Parse current scanned tag from URL
-      const params = new URLSearchParams(window.location.search);
-      const currentTag = params.get("tag");
-
-      let foundTags = loadProgress();
-
-      if (currentTag) {
-        handleScannedTag(currentTag, foundTags);
-      }
-
-      renderTags(foundTags);
-      updateMessages(foundTags);
-    }
-
-    // Toggle between modes and reset UI
-    toggleModeBtn.addEventListener("click", () => {
-      mode = mode === "villains" ? "riddles" : "villains";
-      localStorage.setItem(STORAGE_KEYS.mode, mode);
-      // Clear URL tag param to avoid auto-adding in new mode
-      if (window.history.replaceState) {
-        const url = new URL(window.location);
-        url.searchParams.delete("tag");
-        window.history.replaceState({}, document.title, url.toString());
-      }
-      init();
+  function renderTags() {
+    tagList.innerHTML = "";
+    Object.entries(TAGS).forEach(([tagId, data]) => {
+      tagList.appendChild(createTagElement(tagId, data));
     });
+  }
 
-    // Reset game progress for both modes
-    resetBtn.addEventListener("click", () => {
-      localStorage.removeItem(STORAGE_KEYS.villains);
-      localStorage.removeItem(STORAGE_KEYS.riddles);
-      window.location.href = window.location.pathname; // Reload without query params
-    });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    window.location.href = window.location.pathname; // Reload without query params
+  });
 
-    // Initial load
-    init();
-  </script>
+  renderTags();
+  updateMessageAndPrize();
+</script>
 </body>
 </html>
