@@ -66,18 +66,6 @@
       text-align: center;
     }
 
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    .toggle-container input {
-      margin-left: 10px;
-      transform: scale(1.5);
-    }
-
     button {
       padding: 10px 20px;
       font-size: 1em;
@@ -103,10 +91,6 @@
   </div>
 
   <div class="controls">
-    <div class="toggle-container">
-      <label for="autoclose">Auto-close old tabs?</label>
-      <input type="checkbox" id="autoclose" checked />
-    </div>
     <button id="resetButton">Reset Progress</button>
   </div>
 
@@ -145,22 +129,6 @@
       document.getElementById("resetButton").onclick = function () {
         localStorage.removeItem('scannedTags');
         location.href = location.origin + location.pathname;
-      };
-
-      // === Auto-close logic (inside DOMContentLoaded) ===
-      const bc = new BroadcastChannel("batman-game");
-      const myId = Math.random().toString(36).substring(2);
-      const autoCloseCheckbox = document.getElementById('autoclose');
-      localStorage.setItem('activeTabId', myId);
-
-      bc.postMessage({ type: "new-tab", id: myId });
-
-      bc.onmessage = (event) => {
-        const msg = event.data;
-        if (msg.type === "new-tab" && msg.id !== myId && autoCloseCheckbox?.checked) {
-          document.body.innerHTML = "<p style='color:white; font-size:1.5em;'>A new tab has taken over. Closing this one...</p>";
-          setTimeout(() => window.close(), 1000);
-        }
       };
     });
   </script>
