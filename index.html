@@ -236,17 +236,20 @@
 
   // Update state with current tag depending on mode
   function updateFound() {
-    if (currentTag) {
-      if (currentMode === "villains" && VILLAINS[currentTag] && !foundVillains[currentTag]) {
-        foundVillains[currentTag] = true;
-        localStorage.setItem(STORAGE_VILLAINS, JSON.stringify(foundVillains));
-      }
-      if (currentMode === "riddles" && RIDDLES[currentTag] && !(currentTag in foundRiddles)) {
-        foundRiddles[currentTag] = { solved: false, userAnswer: "" };
-        localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-      }
-    }
+  if (!currentTag) return;
+
+  // Villain mode: mark villain as found
+  if (currentMode === "villains" && VILLAINS[currentTag] && !foundVillains[currentTag]) {
+    foundVillains[currentTag] = true;
+    localStorage.setItem(STORAGE_VILLAINS, JSON.stringify(foundVillains));
   }
+
+  // Riddles mode: mark riddle as found
+  if (currentMode === "riddles" && RIDDLES[currentTag] && !(currentTag in foundRiddles)) {
+    foundRiddles[currentTag] = { solved: false, userAnswer: "" };
+    localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
+  }
+}
 
   updateFound();
 
