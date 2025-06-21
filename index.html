@@ -2,134 +2,180 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Batman Tag Hunt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <style>
     body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: black;
-      color: white;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #121212;
+      color: #f1c40f;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      min-height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
+      justify-content: center;
+      align-items: center;
     }
 
     h1 {
-      font-size: 2.2em;
-      text-align: center;
+      font-size: 3.5em;
       margin-bottom: 10px;
+      line-height: 1.1;
     }
 
-    .villain-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      padding: 10px 0;
+    p {
+      font-size: 1.4em;
+      max-width: 90vw;
+      margin: 0 auto 25px;
     }
 
-    .villain {
-      padding: 15px;
-      background: #222;
-      border: 2px solid #444;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 1em;
-      opacity: 0.6;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      max-width: 95vw;
+      margin-bottom: 30px;
     }
 
-    .villain.found {
-      background: #0f0;
-      color: black;
-      font-weight: bold;
-      opacity: 1;
-      transform: scale(1.05);
+    .tag {
+      flex: 1 1 40vw;
+      max-width: 180px;
+      min-width: 140px;
+      padding: 25px;
+      font-size: 1.4em;
+      border-radius: 14px;
+      box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
+      transition: all 0.3s ease;
+      background: #2c3e50;
+      color: #f1c40f;
     }
 
-    .complete {
-      text-align: center;
-      font-size: 1.5em;
-      background: #ff0;
-      color: black;
-      margin: 20px auto;
-      padding: 10px 20px;
+    .found {
+      background: #27ae60;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(39, 174, 96, 0.8);
+    }
+
+    #message {
+      font-size: 1.6em;
+      margin-bottom: 25px;
+      max-width: 90vw;
+    }
+
+    #prize {
+      font-size: 2em;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 90vw;
+      margin-bottom: 25px;
+      display: none;
+      background: #000;
+      color: #f1c40f;
+      border: 2px solid #f1c40f;
+      box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
+    }
+
+    #resetBtn {
+      font-size: 1.4em;
+      padding: 15px 30px;
       border-radius: 12px;
-      max-width: 300px;
-    }
-
-    .controls {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1em;
-      background: #444;
+      max-width: 90vw;
+      cursor: pointer;
+      background: #c0392b;
       color: white;
       border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    button:hover {
-      background: #666;
+    #resetBtn:hover {
+      background: #e74c3c;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 40px 60px;
+      }
+      .tag {
+        flex: 1 1 130px;
+        max-width: 130px;
+        min-width: 120px;
+        padding: 15px;
+        font-size: 1em;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Batman Tag Hunt</h1>
+  <p>Find all 7 hidden bat-tags to defeat Gotham's villains.</p>
 
-  <div class="villain-list" id="villainList"></div>
+  <div class="tag-list" id="tagList"></div>
 
-  <div id="completeMessage" class="complete" style="display:none;">
-    🦇 Mission Complete! You've found all the villains!
+  <div id="message"></div>
+  <div id="prize">
+    <strong>Mission Complete</strong><br />
+    You've taken down every villain in Gotham.<br />
+    🎁 Collect your reward.
   </div>
 
-  <div class="controls">
-    <button id="resetButton">Reset Progress</button>
-  </div>
+  <button id="resetBtn">Reset Game</button>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const villains = [
-        { id: 'tag1', name: 'Joker' },
-        { id: 'tag2', name: 'Penguin' },
-        { id: 'tag3', name: 'Riddler' },
-        { id: 'tag4', name: 'Two-Face' },
-        { id: 'tag5', name: 'Poison Ivy' },
-        { id: 'tag6', name: 'Scarecrow' },
-        { id: 'tag7', name: 'Bane' }
-      ];
+    const TAGS = {
+      tag1: "Joker",
+      tag2: "Riddler",
+      tag3: "Bane",
+      tag4: "Catwoman",
+      tag5: "Penguin",
+      tag6: "Two-Face",
+      tag7: "Scarecrow",
+    };
 
-      const scanned = JSON.parse(localStorage.getItem('scannedTags') || '[]');
-      const params = new URLSearchParams(window.location.search);
-      const newTag = params.get('tag');
-      if (newTag && !scanned.includes(newTag)) {
-        scanned.push(newTag);
-        localStorage.setItem('scannedTags', JSON.stringify(scanned));
-      }
+    let foundTags;
+    try {
+      foundTags = JSON.parse(localStorage.getItem("foundTags")) || [];
+    } catch (e) {
+      console.error("Failed to parse foundTags:", e);
+      foundTags = [];
+    }
 
-      const villainList = document.getElementById('villainList');
-      villains.forEach(v => {
-        const div = document.createElement('div');
-        div.className = 'villain' + (scanned.includes(v.id) ? ' found' : '');
-        div.textContent = v.name;
-        villainList.appendChild(div);
-      });
+    const params = new URLSearchParams(window.location.search);
+    const currentTag = params.get("tag");
 
-      if (scanned.length === villains.length) {
-        document.getElementById('completeMessage').style.display = 'block';
-      }
+    // Only add currentTag if valid and not already found
+    if (currentTag && TAGS.hasOwnProperty(currentTag) && !foundTags.includes(currentTag)) {
+      foundTags.push(currentTag);
+      localStorage.setItem("foundTags", JSON.stringify(foundTags));
+    }
 
-      document.getElementById("resetButton").onclick = function () {
-        localStorage.removeItem('scannedTags');
-        location.href = location.origin + location.pathname;
-      };
+    // Render the tag list
+    const tagList = document.getElementById("tagList");
+    tagList.innerHTML = "";
+
+    Object.entries(TAGS).forEach(([tagId, villain]) => {
+      const div = document.createElement("div");
+      const isFound = foundTags.includes(tagId);
+      div.className = "tag" + (isFound ? " found" : "");
+      div.textContent = isFound ? `✅ ${villain}` : villain;
+      tagList.appendChild(div);
+    });
+
+    const message = document.getElementById("message");
+    const prize = document.getElementById("prize");
+
+    if (foundTags.length === Object.keys(TAGS).length) {
+      message.textContent = "You've defeated all the villains!";
+      prize.style.display = "block";
+    } else {
+      message.textContent = `Progress: ${foundTags.length} of ${Object.keys(TAGS).length} villains captured.`;
+      prize.style.display = "none";
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      localStorage.removeItem("foundTags");
+      window.location.reload();
     });
   </script>
 </body>
