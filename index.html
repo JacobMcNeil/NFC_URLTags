@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Batman Tag Hunt - Villains & Riddles</title>
+  <title>Batman Tag Hunt</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -19,404 +19,393 @@
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 3.5em;
       margin-bottom: 10px;
+      line-height: 1.1;
+    }
+
+    p {
+      font-size: 1.4em;
+      max-width: 90vw;
+      margin: 0 auto 25px;
     }
 
     .tag-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 16px;
       max-width: 95vw;
       margin-bottom: 30px;
     }
 
     .tag {
-      background: #2c3e50;
-      color: #f1c40f;
+      flex: 1 1 40vw;
+      max-width: 180px;
+      min-width: 140px;
+      padding: 25px;
+      font-size: 1.4em;
       border-radius: 14px;
       box-shadow: 0 0 12px rgba(241, 196, 15, 0.6);
-      padding: 20px;
-      max-width: 260px;
-      min-width: 200px;
-      text-align: left;
+      transition: all 0.3s ease;
+      background: #2c3e50;
+      color: #f1c40f;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: center;
     }
 
     .found {
       background: #27ae60;
-      color: #fff;
+      color: #ffffff;
       box-shadow: 0 0 18px rgba(39, 174, 96, 0.8);
     }
 
-    .riddle-text {
-      font-weight: bold;
-      font-size: 1.1em;
-      min-height: 60px;
-    }
-
-    input.guess-input {
-      padding: 8px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      color: #121212;
-    }
-
-    button.check-btn {
-      background: #f1c40f;
-      border: none;
-      padding: 8px 12px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-      color: #121212;
-    }
-
-    button.check-btn:hover:not(:disabled) {
-      background: #d4ac0d;
-    }
-
-    .feedback {
-      font-style: italic;
-      min-height: 24px;
-      margin-top: 5px;
-    }
-
     #message {
-      font-size: 1.4em;
-      margin-bottom: 20px;
+      font-size: 1.6em;
+      margin-bottom: 25px;
       max-width: 90vw;
     }
 
     #prize {
       font-size: 2em;
-      padding: 20px;
+      padding: 25px;
       border-radius: 16px;
       max-width: 90vw;
       margin-bottom: 25px;
+      display: none;
       background: #000;
       color: #f1c40f;
       border: 2px solid #f1c40f;
       box-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
-      display: none;
     }
 
-    #resetBtn {
-      font-size: 1.3em;
-      padding: 12px 28px;
+    #resetBtn, #modeToggle {
+      font-size: 1.4em;
+      padding: 15px 30px;
       border-radius: 12px;
+      max-width: 90vw;
+      cursor: pointer;
       background: #c0392b;
       color: white;
       border: none;
-      cursor: pointer;
       transition: background 0.3s;
-      margin-top: 15px;
+      margin: 0 10px;
     }
 
-    #resetBtn:hover {
+    #resetBtn:hover, #modeToggle:hover {
       background: #e74c3c;
     }
 
-    #modeToggle {
-      margin-bottom: 20px;
-      cursor: pointer;
-      background: #34495e;
-      color: #f1c40f;
+    .guess-input {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      padding: 8px 10px;
+      margin-top: 10px;
+      border-radius: 8px;
       border: none;
-      padding: 10px 20px;
-      font-size: 1.2em;
-      border-radius: 12px;
-      user-select: none;
-      transition: background 0.3s;
-    }
-    #modeToggle:hover {
-      background: #3e5871;
+      width: 90%;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    @media (max-width: 400px) {
+    .check-btn {
+      margin-top: 8px;
+      padding: 8px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #f1c40f;
+      color: #121212;
+      transition: background 0.3s;
+    }
+
+    .check-btn:hover:not(:disabled) {
+      background: #d4ac0d;
+    }
+
+    .check-btn:disabled {
+      cursor: default;
+      background: #999999;
+      color: #666666;
+    }
+
+    .feedback {
+      margin-top: 6px;
+      font-weight: 700;
+      min-height: 1.4em;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 40px 60px;
+      }
       .tag {
-        max-width: 90vw;
-        min-width: auto;
+        flex: 1 1 130px;
+        max-width: 130px;
+        min-width: 120px;
+        padding: 15px;
+        font-size: 1em;
       }
     }
   </style>
 </head>
 <body>
   <h1>Batman Tag Hunt</h1>
-
-  <button id="modeToggle" aria-label="Toggle Game Mode">Switch to Riddler Mode</button>
-
   <p id="description">Find all 7 hidden bat-tags to defeat Gotham's villains.</p>
+
+  <div>
+    <button id="modeToggle">Switch to Riddler Mode</button>
+    <button id="resetBtn">Reset Game</button>
+  </div>
 
   <div class="tag-list" id="tagList"></div>
 
   <div id="message"></div>
   <div id="prize">
     <strong>Mission Complete</strong><br />
-    You've completed the mission! 🎉
+    You've taken down every villain in Gotham.<br />
+    🎁 Collect your reward.
   </div>
 
-  <button id="resetBtn">Reset Game</button>
+  <script>
+    const TAGS = {
+      tag1: "Joker",
+      tag2: "Riddler",
+      tag3: "Bane",
+      tag4: "Catwoman",
+      tag5: "Penguin",
+      tag6: "Two-Face",
+      tag7: "Scarecrow",
+    };
 
-<script>
-  // Data for both modes
-  const VILLAINS = {
-    tag1: "Joker",
-    tag2: "Riddler",
-    tag3: "Bane",
-    tag4: "Catwoman",
-    tag5: "Penguin",
-    tag6: "Two-Face",
-    tag7: "Scarecrow"
-  };
+    const RIDDLES = {
+      tag1: { riddle: "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", answer: "map" },
+      tag2: { riddle: "What has keys but can't open locks?", answer: "piano" },
+      tag3: { riddle: "The more you take, the more you leave behind. What am I?", answer: "footsteps" },
+      tag4: { riddle: "I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?", answer: "echo" },
+      tag5: { riddle: "What can run but never walks, has a mouth but never talks?", answer: "river" },
+      tag6: { riddle: "What has hands but can not clap?", answer: "clock" },
+      tag7: { riddle: "What has to be broken before you can use it?", answer: "egg" },
+    };
 
-  const RIDDLES = {
-    tag1: {
-      riddle: "I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?",
-      answer: "echo"
-    },
-    tag2: {
-      riddle: "I’m tall when I’m young, and I’m short when I’m old. What am I?",
-      answer: "candle"
-    },
-    tag3: {
-      riddle: "The more you take, the more you leave behind. What am I?",
-      answer: "footsteps"
-    },
-    tag4: {
-      riddle: "What has hands but can’t clap?",
-      answer: "clock"
-    },
-    tag5: {
-      riddle: "I have cities but no houses, forests but no trees, and rivers but no water. What am I?",
-      answer: "map"
-    },
-    tag6: {
-      riddle: "What can fill a room but takes up no space?",
-      answer: "light"
-    },
-    tag7: {
-      riddle: "I’m light as a feather, yet the strongest man can’t hold me for much longer than a minute. What am I?",
-      answer: "breath"
+    const STORAGE_VILLAINS = "foundVillains";
+    const STORAGE_RIDDLES = "foundRiddles";
+
+    let foundVillains = {};
+    let foundRiddles = {};
+    let currentMode = localStorage.getItem("batmanMode") || "villains";
+
+    // Parse progress from localStorage
+    try {
+      foundVillains = JSON.parse(localStorage.getItem(STORAGE_VILLAINS)) || {};
+    } catch (e) {
+      foundVillains = {};
     }
-  };
+    try {
+      foundRiddles = JSON.parse(localStorage.getItem(STORAGE_RIDDLES)) || {};
+    } catch (e) {
+      foundRiddles = {};
+    }
 
-  // Constants for storage keys
-  const STORAGE_VILLAINS = "foundVillains";
-  const STORAGE_RIDDLES = "foundRiddles";
+    // Check URL params for current tag scanned
+    const params = new URLSearchParams(window.location.search);
+    const currentTag = params.get("tag");
 
-  // Current mode: "villains" or "riddles"
-  let currentMode = localStorage.getItem("batmanMode") || "villains";
-
-  // URL param (same for both modes)
-  const params = new URLSearchParams(window.location.search);
-  const currentTag = params.get("tag");
-
-  // State
-  let foundVillains = {};
-  let foundRiddles = {};
-
-  // Load from localStorage safely
-  try {
-    foundVillains = JSON.parse(localStorage.getItem(STORAGE_VILLAINS)) || {};
-  } catch {
-    foundVillains = {};
-  }
-
-  try {
-    foundRiddles = JSON.parse(localStorage.getItem(STORAGE_RIDDLES)) || {};
-  } catch {
-    foundRiddles = {};
-  }
-
-  // Update state with current tag depending on mode
-  function updateFound() {
     if (currentTag) {
-      if (currentMode === "villains" && VILLAINS[currentTag] && !foundVillains[currentTag]) {
+      if (currentMode === "villains" && TAGS.hasOwnProperty(currentTag)) {
         foundVillains[currentTag] = true;
         localStorage.setItem(STORAGE_VILLAINS, JSON.stringify(foundVillains));
-      }
-      if (currentMode === "riddles" && RIDDLES[currentTag] && !(currentTag in foundRiddles)) {
-        foundRiddles[currentTag] = { solved: false, userAnswer: "" };
-        localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-      }
-    }
-  }
-
-  updateFound();
-
-  const tagList = document.getElementById("tagList");
-  const message = document.getElementById("message");
-  const prize = document.getElementById("prize");
-  const resetBtn = document.getElementById("resetBtn");
-  const modeToggle = document.getElementById("modeToggle");
-  const description = document.getElementById("description");
-
-  // Render villains mode tags
-  function renderVillains() {
-    tagList.innerHTML = "";
-    Object.entries(VILLAINS).forEach(([tagId, villain]) => {
-      const div = document.createElement("div");
-      div.className = "tag";
-      if (foundVillains[tagId]) div.classList.add("found");
-      div.textContent = foundVillains[tagId] ? `✅ ${villain}` : villain;
-      tagList.appendChild(div);
-    });
-
-    const total = Object.keys(VILLAINS).length;
-    const foundCount = Object.keys(foundVillains).length;
-
-    if (foundCount === total) {
-      message.textContent = "You've defeated all the villains!";
-      prize.style.display = "block";
-      prize.innerHTML = `<strong>Mission Complete</strong><br />You've taken down every villain in Gotham.<br />🎁 Collect your reward.`;
-    } else {
-      message.textContent = `Progress: ${foundCount} of ${total} villains captured.`;
-      prize.style.display = "none";
-    }
-  }
-
-  // Render riddles mode tags with input and feedback
-  function renderRiddles() {
-    tagList.innerHTML = "";
-    Object.entries(RIDDLES).forEach(([tagId, data]) => {
-      const div = document.createElement("div");
-      div.className = "tag";
-      if (foundRiddles[tagId] && foundRiddles[tagId].solved) div.classList.add("found");
-
-      const riddleP = document.createElement("p");
-      riddleP.className = "riddle-text";
-      riddleP.textContent = data.riddle;
-      div.appendChild(riddleP);
-
-      if (foundRiddles[tagId]) {
-        // Input for answer
-        const input = document.createElement("input");
-        input.type = "text";
-        input.className = "guess-input";
-        input.placeholder = "Enter your guess";
-        input.disabled = foundRiddles[tagId].solved;
-        input.value = foundRiddles[tagId].userAnswer || "";
-        input.style.color = foundRiddles[tagId].solved ? "#27ae60" : "#121212";
-
-        // Feedback div
-        const feedback = document.createElement("div");
-        feedback.className = "feedback";
-        feedback.style.color = foundRiddles[tagId].solved ? "#27ae60" : "#f1c40f";
-        feedback.textContent = foundRiddles[tagId].solved ? "Correct! 🎉" : "";
-
-        // Check button
-        const button = document.createElement("button");
-        button.className = "check-btn";
-        button.textContent = foundRiddles[tagId].solved ? "Solved" : "Check";
-        button.disabled = foundRiddles[tagId].solved;
-
-        // On check
-        button.addEventListener("click", () => {
-          const guess = input.value.trim().toLowerCase();
-          if (!guess) {
-            feedback.textContent = "Please enter a guess.";
-            feedback.style.color = "#f1c40f";
-            return;
-          }
-          if (guess === data.answer.toLowerCase()) {
-            feedback.textContent = "Correct! 🎉";
-            feedback.style.color = "#27ae60";
-            foundRiddles[tagId].solved = true;
-            foundRiddles[tagId].userAnswer = input.value.trim();
-            input.disabled = true;
-            button.disabled = true;
-            button.textContent = "Solved";
-            localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-            updateMessageAndPrize();
-          } else {
-            feedback.textContent = "Incorrect, try again.";
-            feedback.style.color = "#e74c3c";
-            foundRiddles[tagId].userAnswer = input.value.trim();
-            localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-          }
-        });
-
-        // Save input changes on typing to localStorage so it's preserved on reload
-        input.addEventListener("input", () => {
-          foundRiddles[tagId].userAnswer = input.value;
+      } else if (currentMode === "riddles" && RIDDLES.hasOwnProperty(currentTag)) {
+        if (!foundRiddles[currentTag]) {
+          foundRiddles[currentTag] = { solved: false, userAnswer: "" };
           localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-        });
-
-        div.appendChild(input);
-        div.appendChild(button);
-        div.appendChild(feedback);
-      } else {
-        // Tag not found yet, show placeholder text
-        const locked = document.createElement("p");
-        locked.textContent = "❓ Riddle hidden";
-        locked.style.fontStyle = "italic";
-        div.appendChild(locked);
+        }
       }
+    }
 
-      tagList.appendChild(div);
-    });
+    // Elements
+    const tagList = document.getElementById("tagList");
+    const message = document.getElementById("message");
+    const prize = document.getElementById("prize");
+    const resetBtn = document.getElementById("resetBtn");
+    const modeToggle = document.getElementById("modeToggle");
+    const description = document.getElementById("description");
 
-    updateMessageAndPrize();
-  }
+    function renderVillains() {
+      tagList.innerHTML = "";
 
-  // Update message & prize in riddles mode
-  function updateMessageAndPrize() {
-    const total = Object.keys(RIDDLES).length;
-    const solvedCount = Object.values(foundRiddles).filter(t => t.solved).length;
+      Object.entries(TAGS).forEach(([tagId, villain]) => {
+        const div = document.createElement("div");
+        const found = !!foundVillains[tagId];
+        div.className = "tag" + (found ? " found" : "");
+        div.textContent = found ? `✅ ${villain}` : villain;
+        tagList.appendChild(div);
+      });
 
-    if (currentMode === "riddles") {
+      const total = Object.keys(TAGS).length;
+      const foundCount = Object.keys(foundVillains).length;
+
+      if (foundCount === total) {
+        message.textContent = "You've defeated all the villains!";
+        prize.style.display = "block";
+        prize.innerHTML = `<strong>Mission Complete</strong><br />You've taken down every villain in Gotham.<br />🎁 Collect your reward.`;
+      } else {
+        message.textContent = `Progress: ${foundCount} of ${total} villains captured.`;
+        prize.style.display = "none";
+      }
+    }
+
+    function renderRiddles() {
+      tagList.innerHTML = "";
+
+      Object.entries(RIDDLES).forEach(([tagId, data]) => {
+        const div = document.createElement("div");
+        div.className = "tag";
+
+        if (foundRiddles[tagId]) {
+          // Riddle text
+          const riddleP = document.createElement("p");
+          riddleP.textContent = data.riddle;
+          div.appendChild(riddleP);
+
+          // Input for answer
+          const input = document.createElement("input");
+          input.type = "text";
+          input.className = "guess-input";
+          input.placeholder = "Enter your guess";
+          input.value = foundRiddles[tagId].userAnswer || "";
+
+          if (foundRiddles[tagId].solved) {
+            input.disabled = true;
+            input.style.backgroundColor = "#27ae60";
+            input.style.color = "#fff";
+          } else {
+            input.disabled = false;
+            input.style.backgroundColor = "";
+            input.style.color = "#121212";
+          }
+
+          // Feedback div
+          const feedback = document.createElement("div");
+          feedback.className = "feedback";
+
+          if (foundRiddles[tagId].solved) {
+            feedback.textContent = "Correct! 🎉";
+            feedback.style.color = "#e6f9e6"; // Light color on green bg
+          } else {
+            feedback.textContent = "";
+            feedback.style.color = "#f1c40f";
+          }
+
+          // Check button
+          const button = document.createElement("button");
+          button.className = "check-btn";
+          button.textContent = foundRiddles[tagId].solved ? "Solved" : "Check";
+          button.disabled = foundRiddles[tagId].solved;
+
+          button.addEventListener("click", () => {
+            const guess = input.value.trim().toLowerCase();
+            if (!guess) {
+              feedback.textContent = "Please enter a guess.";
+              feedback.style.color = "#f1c40f";
+              return;
+            }
+            if (guess === data.answer.toLowerCase()) {
+              feedback.textContent = "Correct! 🎉";
+              feedback.style.color = "#e6f9e6";
+              foundRiddles[tagId].solved = true;
+              foundRiddles[tagId].userAnswer = input.value.trim();
+              input.disabled = true;
+              input.style.backgroundColor = "#27ae60";
+              input.style.color = "#fff";
+              button.disabled = true;
+              button.textContent = "Solved";
+              localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
+              updateMessageAndPrize();
+            } else {
+              feedback.textContent = "Incorrect, try again.";
+              feedback.style.color = "#e74c3c";
+              foundRiddles[tagId].userAnswer = input.value.trim();
+              localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
+            }
+          });
+
+          input.addEventListener("input", () => {
+            foundRiddles[tagId].userAnswer = input.value;
+            localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
+          });
+
+          div.appendChild(input);
+          div.appendChild(button);
+          div.appendChild(feedback);
+
+        } else {
+          // If tag not scanned yet, show placeholder
+          div.textContent = "Scan tag to reveal riddle";
+        }
+
+        // Highlight solved riddles' tags
+        if (foundRiddles[tagId] && foundRiddles[tagId].solved) {
+          div.classList.add("found");
+        }
+
+        tagList.appendChild(div);
+      });
+
+      updateMessageAndPrize();
+    }
+
+    function updateMessageAndPrize() {
+      const total = Object.keys(RIDDLES).length;
+      const solvedCount = Object.values(foundRiddles).filter(r => r.solved).length;
+
       if (solvedCount === total) {
         message.textContent = "You've solved all the riddles!";
         prize.style.display = "block";
-        prize.innerHTML = `<strong>Mission Complete</strong><br />You've solved all the Riddler’s puzzles! 🎉`;
+        prize.innerHTML = `<strong>Mission Complete</strong><br />You've cracked every Riddler's riddle.<br />🎁 Collect your reward.`;
       } else {
         message.textContent = `Progress: ${solvedCount} of ${total} riddles solved.`;
         prize.style.display = "none";
       }
     }
-  }
 
-  // Main render based on mode
-  function render() {
-    if (currentMode === "villains") {
-      description.textContent = "Find all 7 hidden bat-tags to defeat Gotham's villains.";
-      modeToggle.textContent = "Switch to Riddler Mode";
-      prize.style.display = "none";
-      renderVillains();
-    } else {
-      description.textContent = "Find all 7 riddles left by the Riddler and solve them to win!";
-      modeToggle.textContent = "Switch to Villain Mode";
-      renderRiddles();
+    function render() {
+      if (currentMode === "villains") {
+        description.textContent = "Find all 7 hidden bat-tags to defeat Gotham's villains.";
+        modeToggle.textContent = "Switch to Riddler Mode";
+        renderVillains();
+      } else {
+        description.textContent = "Solve all 7 Riddler's riddles by scanning bat-tags.";
+        modeToggle.textContent = "Switch to Villain Mode";
+        renderRiddles();
+      }
     }
-  }
 
-  // Toggle mode and save to localStorage
-  modeToggle.addEventListener("click", () => {
-    currentMode = currentMode === "villains" ? "riddles" : "villains";
-    localStorage.setItem("batmanMode", currentMode);
+    resetBtn.addEventListener("click", () => {
+      if (currentMode === "villains") {
+        localStorage.removeItem(STORAGE_VILLAINS);
+        foundVillains = {};
+      } else {
+        localStorage.removeItem(STORAGE_RIDDLES);
+        foundRiddles = {};
+      }
+      prize.style.display = "none";
+      message.textContent = "";
+      render();
+    });
+
+    modeToggle.addEventListener("click", () => {
+      currentMode = currentMode === "villains" ? "riddles" : "villains";
+      localStorage.setItem("batmanMode", currentMode);
+      prize.style.display = "none";
+      message.textContent = "";
+      render();
+    });
+
+    // Initial render
     render();
-  });
-
-  // Reset game progress
-  resetBtn.addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_VILLAINS);
-    localStorage.removeItem(STORAGE_RIDDLES);
-    localStorage.removeItem("batmanMode");
-    foundVillains = {};
-    foundRiddles = {};
-    currentMode = "villains";
-    // Reload without query params to clear current tag
-    window.location.href = window.location.pathname;
-  });
-
-  render();
-</script>
+  </script>
 </body>
 </html>
