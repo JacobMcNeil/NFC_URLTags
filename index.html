@@ -139,6 +139,19 @@
     #modeToggle:hover {
       background: #3e5871;
     }
+    #scrollIndicator {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2em;
+      animation: bounce 1.5s infinite;
+      z-index: 100;
+      color: #f1c40f;
+      display: none;
+      pointer-events: none;
+    }
+
 
     @media (max-width: 400px) {
       .tag {
@@ -164,6 +177,7 @@
   </div>
 
   <button id="resetBtn">Reset Game</button>
+  <div id="scrollIndicator">⬇️</div>
 
 <script>
   // Data for both modes
@@ -428,6 +442,21 @@
     // Reload without query params to clear current tag
     window.location.href = window.location.pathname;
   });
+  function updateScrollIndicator() {
+    const scrollIndicator = document.getElementById("scrollIndicator");
+    const scrollable = document.body.scrollHeight > window.innerHeight;
+    const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20;
+  
+    if (scrollable && !scrolledToBottom) {
+      scrollIndicator.style.display = "block";
+    } else {
+      scrollIndicator.style.display = "none";
+    }
+  }
+  
+  window.addEventListener("scroll", updateScrollIndicator);
+  window.addEventListener("resize", updateScrollIndicator);
+  window.addEventListener("load", updateScrollIndicator);
 
   render();
 </script>
