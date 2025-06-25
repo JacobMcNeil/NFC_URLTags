@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Batman Tag Hunt - Villains & Riddles</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <style>
@@ -153,7 +153,7 @@
 
   <button id="modeToggle" aria-label="Toggle Game Mode">Switch to Riddler Mode</button>
 
-  <p id="description">Find all 7 hidden bat-tags to defeat Gotham's villains.</p>
+  <p id="description">Find all 9 hidden bat-tags to defeat Gotham's villains.</p>
 
   <div class="tag-list" id="tagList"></div>
 
@@ -174,7 +174,9 @@
     tag4: "Catwoman",
     tag5: "Penguin",
     tag6: "Two-Face",
-    tag7: "Scarecrow"
+    tag7: "Scarecrow",
+    tag8: "Poison Ivy",
+    tag9: "Mr. Freeze"
   };
 
   const RIDDLES = {
@@ -205,6 +207,14 @@
   tag7: {
     riddle: "I spread fear with toxins and scarecrows; your mind’s my playground. Who am I?",
     answer: "scarecrow"
+  }
+  tag8: {
+    riddle: "I command plants and toxins alike, beauty is my weapon. Who am I?",
+    answer: "poison ivy"
+  },
+  tag9: {
+    riddle: "My heart is frozen, my suit runs cold, I seek to bring eternal winter. Who am I?",
+    answer: "mr. freeze"
   }
 };
   // Constants for storage keys
