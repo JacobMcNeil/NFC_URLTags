@@ -145,21 +145,20 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
-      animation: bat-bounce 1.5s infinite;
       display: none;
       pointer-events: none;
+      animation: arrow-bounce 1.5s infinite;
       filter: drop-shadow(0 0 6px #f1c40f);
     }
     
-    @keyframes bat-bounce {
+    @keyframes arrow-bounce {
       0%, 100% {
         transform: translateX(-50%) translateY(0);
       }
       50% {
-        transform: translateX(-50%) translateY(-10px);
+        transform: translateX(-50%) translateY(-8px);
       }
     }
-
 
     @media (max-width: 400px) {
       .tag {
@@ -187,8 +186,8 @@
   <button id="resetBtn">Reset Game</button>
 
   <div id="scrollIndicator">
-    <svg width="40" height="24" viewBox="0 0 24 24" fill="#f1c40f" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 0C9 0 5.5 2 4 5C2 2 0 3 0 6C0 10 5 13 12 13C19 13 24 10 24 6C24 3 22 2 20 5C18.5 2 15 0 12 0Z"/>
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="#f1c40f" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 16L6 10H18L12 16Z"/>
     </svg>
   </div>
 
