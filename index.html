@@ -399,12 +399,12 @@
   // Main render based on mode
   function render() {
     if (currentMode === "villains") {
-      description.textContent = "Find all 7 hidden bat-tags to defeat Gotham's villains.";
+      description.textContent = "Find all 9 hidden bat-tags to defeat Gotham's villains.";
       modeToggle.textContent = "Switch to Riddler Mode";
       prize.style.display = "none";
       renderVillains();
     } else {
-      description.textContent = "Find all 7 riddles left by the Riddler and solve them to win!";
+      description.textContent = "Find all 9 riddles left by the Riddler and solve them to win!";
       modeToggle.textContent = "Switch to Villain Mode";
       renderRiddles();
     }
