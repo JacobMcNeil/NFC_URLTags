@@ -267,18 +267,6 @@
   const STORAGE_RIDDLES = "foundRiddles";
   const STORAGE_LETTERS = "foundLetters";
 
-  // Current mode: "villains" or "riddles"
-  modeToggle.addEventListener("click", () => {
-    if (currentMode === "villains") {
-      currentMode = "riddles";
-    } else if (currentMode === "riddles") {
-      currentMode = "letters";
-    } else {
-      currentMode = "villains";
-    }
-    localStorage.setItem("batmanMode", currentMode);
-    render();
-  });
 
   // URL param (same for both modes)
   const params = new URLSearchParams(window.location.search);
@@ -520,8 +508,15 @@
   }
 
   // Toggle mode and save to localStorage
+  // Current mode: "villains" or "riddles"
   modeToggle.addEventListener("click", () => {
-    currentMode = currentMode === "villains" ? "riddles" : "villains";
+    if (currentMode === "villains") {
+      currentMode = "riddles";
+    } else if (currentMode === "riddles") {
+      currentMode = "letters";
+    } else {
+      currentMode = "villains";
+    }
     localStorage.setItem("batmanMode", currentMode);
     render();
   });
@@ -530,6 +525,8 @@
   resetBtn.addEventListener("click", () => {
     localStorage.removeItem(STORAGE_VILLAINS);
     localStorage.removeItem(STORAGE_RIDDLES);
+    localStorage.removeItem(STORAGE_LETTERS);
+    foundLetters = {};
     localStorage.removeItem("batmanMode");
     foundVillains = {};
     foundRiddles = {};
