@@ -303,6 +303,7 @@
     Object.entries(VILLAINS).forEach(([tagId, villain]) => {
       const div = document.createElement("div");
       div.className = "tag";
+      div.id = `tag-${tagId}`;
       if (foundVillains[tagId]) div.classList.add("found");
       div.textContent = foundVillains[tagId] ? `✅ ${villain}` : villain;
       tagList.appendChild(div);
@@ -327,6 +328,7 @@
     Object.entries(RIDDLES).forEach(([tagId, data]) => {
       const div = document.createElement("div");
       div.className = "tag";
+      div.id = `tag-${tagId}`;
       if (foundRiddles[tagId] && foundRiddles[tagId].solved) div.classList.add("found");
 
       if (foundRiddles[tagId]) {
@@ -471,6 +473,15 @@
   window.addEventListener("load", updateScrollIndicator);
 
   render();
+  if (currentTag) {
+    const tagElement = document.getElementById(`tag-${currentTag}`);
+    if (tagElement) {
+      // Use a slight timeout to ensure the element has been rendered
+      setTimeout(() => {
+        tagElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    }
+  }
 </script>
 </body>
 </html>
