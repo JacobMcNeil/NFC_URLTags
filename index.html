@@ -473,12 +473,21 @@
   window.addEventListener("load", updateScrollIndicator);
 
   render();
+  // Scroll to the newly scanned tag element, if applicable
   if (currentTag) {
     const tagElement = document.getElementById(`tag-${currentTag}`);
     if (tagElement) {
-      // Use a slight timeout to ensure the element has been rendered
+      // Wait for DOM to render fully
       setTimeout(() => {
         tagElement.scrollIntoView({ behavior: "smooth", block: "center" });
+  
+        // In riddle mode, focus the input field if present
+        if (currentMode === "riddles") {
+          const input = tagElement.querySelector("input.guess-input");
+          if (input && !input.disabled) {
+            input.focus();
+          }
+        }
       }, 300);
     }
   }
