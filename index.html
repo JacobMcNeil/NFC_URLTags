@@ -150,6 +150,14 @@
       animation: arrow-bounce 1.5s infinite;
       filter: drop-shadow(0 0 6px #f1c40f);
     }
+    @keyframes flash {
+      0%, 100% { box-shadow: 0 0 15px rgba(241, 196, 15, 1); }
+      50% { box-shadow: 0 0 25px 10px rgba(241, 196, 15, 0.8); }
+    }
+    
+    .flash-highlight {
+      animation: flash 1s ease-in-out 2;
+    }
     
     @keyframes arrow-bounce {
       0%, 100% {
@@ -473,21 +481,25 @@
   window.addEventListener("load", updateScrollIndicator);
 
   render();
-  // Scroll to the newly scanned tag element, if applicable
   if (currentTag) {
     const tagElement = document.getElementById(`tag-${currentTag}`);
     if (tagElement) {
-      // Wait for DOM to render fully
       setTimeout(() => {
         tagElement.scrollIntoView({ behavior: "smooth", block: "center" });
   
-        // In riddle mode, focus the input field if present
+        // Focus the input if in riddles mode
         if (currentMode === "riddles") {
           const input = tagElement.querySelector("input.guess-input");
           if (input && !input.disabled) {
             input.focus();
           }
         }
+  
+        // Add flash animation
+        tagElement.classList.add("flash-highlight");
+        setTimeout(() => {
+          tagElement.classList.remove("flash-highlight");
+        }, 2000); // Match total animation duration
       }, 300);
     }
   }
