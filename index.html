@@ -214,49 +214,71 @@
   };
 
   const RIDDLES = {
-  tag1: {
-    riddle: "I’m the clown prince of crime, always laughing with a sinister grin. Who am I?",
-    answer: "joker"
-  },
-  tag2: {
-    riddle: "I wear a green suit and love puzzles and games. Who am I?",
-    answer: "riddler"
-  },
-  tag3: {
-    riddle: "I break bones and plans alike, with a mask and immense strength. Who am I?",
-    answer: "bane"
-  },
-  tag4: {
-    riddle: "I’m a feline thief, sometimes foe, sometimes ally. Who am I?",
-    answer: "catwoman"
-  },
-  tag5: {
-    riddle: "I waddle and scheme with a monocle and umbrella. Who am I?",
-    answer: "penguin"
-  },
-  tag6: {
-    riddle: "Two-faced in every way, justice and crime live in me. Who am I?",
-    answer: "two-face"
-  },
-  tag7: {
-    riddle: "I spread fear with toxins and scarecrows; your mind’s my playground. Who am I?",
-    answer: "scarecrow"
-  },
-  tag8: {
-    riddle: "I command plants and toxins alike, beauty is my weapon. Who am I?",
-    answer: "poison ivy"
-  },
-  tag9: {
-    riddle: "My heart is frozen, my suit runs cold, I seek to bring eternal winter. Who am I?",
-    answer: "mr. freeze"
-  }
-};
+    tag1: {
+      riddle: "I’m the clown prince of crime, always laughing with a sinister grin. Who am I?",
+      answer: "joker"
+    },
+    tag2: {
+      riddle: "I wear a green suit and love puzzles and games. Who am I?",
+      answer: "riddler"
+    },
+    tag3: {
+      riddle: "I break bones and plans alike, with a mask and immense strength. Who am I?",
+      answer: "bane"
+    },
+    tag4: {
+      riddle: "I’m a feline thief, sometimes foe, sometimes ally. Who am I?",
+      answer: "catwoman"
+    },
+    tag5: {
+      riddle: "I waddle and scheme with a monocle and umbrella. Who am I?",
+      answer: "penguin"
+    },
+    tag6: {
+      riddle: "Two-faced in every way, justice and crime live in me. Who am I?",
+      answer: "two-face"
+    },
+    tag7: {
+      riddle: "I spread fear with toxins and scarecrows; your mind’s my playground. Who am I?",
+      answer: "scarecrow"
+    },
+    tag8: {
+      riddle: "I command plants and toxins alike, beauty is my weapon. Who am I?",
+      answer: "poison ivy"
+    },
+    tag9: {
+      riddle: "My heart is frozen, my suit runs cold, I seek to bring eternal winter. Who am I?",
+      answer: "mr. freeze"
+    }
+  };
+  const LETTERS = {
+    tag1: "H",
+    tag2: "U",
+    tag3: "S",
+    tag4: "H",
+    tag5: "",
+    tag6: "",
+    tag7: "",
+    tag8: "",
+    tag9: ""
+  };
   // Constants for storage keys
   const STORAGE_VILLAINS = "foundVillains";
   const STORAGE_RIDDLES = "foundRiddles";
+  const STORAGE_LETTERS = "foundLetters";
 
   // Current mode: "villains" or "riddles"
-  let currentMode = localStorage.getItem("batmanMode") || "villains";
+  modeToggle.addEventListener("click", () => {
+    if (currentMode === "villains") {
+      currentMode = "riddles";
+    } else if (currentMode === "riddles") {
+      currentMode = "letters";
+    } else {
+      currentMode = "villains";
+    }
+    localStorage.setItem("batmanMode", currentMode);
+    render();
+  });
 
   // URL param (same for both modes)
   const params = new URLSearchParams(window.location.search);
@@ -265,6 +287,7 @@
   // State
   let foundVillains = {};
   let foundRiddles = {};
+  let foundLetters = {};
 
   // Load from localStorage safely
   try {
@@ -279,22 +302,32 @@
     foundRiddles = {};
   }
 
+  try {
+    foundLetters = JSON.parse(localStorage.getItem(STORAGE_LETTERS)) || {};
+  } catch {
+    foundLetters = {};
+  }
+
   // Update state with current tag depending on mode
   function updateFound() {
-  if (!currentTag) return;
-
-  // Villain mode: mark villain as found
-  if (currentMode === "villains" && VILLAINS[currentTag] && !foundVillains[currentTag]) {
-    foundVillains[currentTag] = true;
-    localStorage.setItem(STORAGE_VILLAINS, JSON.stringify(foundVillains));
+    if (!currentTag) return;
+  
+    // Villain mode: mark villain as found
+    if (currentMode === "villains" && VILLAINS[currentTag] && !foundVillains[currentTag]) {
+      foundVillains[currentTag] = true;
+      localStorage.setItem(STORAGE_VILLAINS, JSON.stringify(foundVillains));
+    }
+  
+    // Riddles mode: mark riddle as found
+    if (currentMode === "riddles" && RIDDLES[currentTag] && !(currentTag in foundRiddles)) {
+      foundRiddles[currentTag] = { solved: false, userAnswer: "" };
+      localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
+    }
+    if (currentMode === "letters" && LETTERS[currentTag] && !foundLetters[currentTag]) {
+      foundLetters[currentTag] = LETTERS[currentTag];
+      localStorage.setItem(STORAGE_LETTERS, JSON.stringify(foundLetters));
+    }
   }
-
-  // Riddles mode: mark riddle as found
-  if (currentMode === "riddles" && RIDDLES[currentTag] && !(currentTag in foundRiddles)) {
-    foundRiddles[currentTag] = { solved: false, userAnswer: "" };
-    localStorage.setItem(STORAGE_RIDDLES, JSON.stringify(foundRiddles));
-  }
-}
 
   updateFound();
 
@@ -415,6 +448,42 @@
     updateMessageAndPrize();
   }
 
+  function renderLetters() {
+    tagList.innerHTML = "";
+    Object.entries(LETTERS).forEach(([tagId, letter]) => {
+      const div = document.createElement("div");
+      div.className = "tag";
+      div.id = `tag-${tagId}`;
+  
+      if (foundLetters[tagId]) {
+        div.classList.add("found");
+        div.textContent = `🕵️ Found Letter: ${foundLetters[tagId]}`;
+      } else if (letter) {
+        div.textContent = "🔎 Letter hidden";
+      } else {
+        div.textContent = "❌ No letter here";
+      }
+  
+      tagList.appendChild(div);
+    });
+  
+    const totalLetters = Object.values(LETTERS).filter(l => l).length;
+    const collected = Object.values(foundLetters).filter(l => l).length;
+  
+    if (collected === totalLetters) {
+      const word = Object.values(LETTERS)
+        .map((_, i) => foundLetters[`tag${i + 1}`] || "_")
+        .join("");
+  
+      message.textContent = `You've found all the letters! The villain is: ${word}`;
+      prize.style.display = "block";
+      prize.innerHTML = `<strong>Case Cracked</strong><br />You've revealed the name: ${word} 🎉`;
+    } else {
+      message.textContent = `Progress: ${collected} of ${totalLetters} letters found.`;
+      prize.style.display = "none";
+    }
+  }
+
   // Update message & prize in riddles mode
   function updateMessageAndPrize() {
     const total = Object.keys(RIDDLES).length;
@@ -439,10 +508,14 @@
       modeToggle.textContent = "Switch to Riddler Mode";
       prize.style.display = "none";
       renderVillains();
-    } else {
+    } else if (currentMode === "riddles") {
       description.textContent = "Find all 9 riddles left by the Riddler and solve them to win!";
-      modeToggle.textContent = "Switch to Villain Mode";
+      modeToggle.textContent = "Switch to Letter Mode";
       renderRiddles();
+    } else {
+      description.textContent = "Scan tags to collect secret letters and reveal the hidden villain.";
+      modeToggle.textContent = "Switch to Villain Mode";
+      renderLetters();
     }
   }
 
