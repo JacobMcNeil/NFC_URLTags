@@ -176,18 +176,18 @@
     }
     .letter-board {
       display: flex;
-      flex-wrap: wrap;          /* wrap on small screens */
+      flex-wrap: wrap;
       gap: 6px;
       justify-content: center;
-      padding: 0 10px;
-      overflow-x: hidden;
+      padding: 6px 10px;      /* added vertical padding */
+      overflow: visible;      /* allow glow to show */
     }
     
     .letter-box {
-      flex: 1 1 40px;           /* flexible width with base 40px */
-      max-width: 12vw;          /* max width relative to viewport */
-      min-width: 30px;          /* don't shrink too small */
-      font-size: 4vw;           /* font scales on screen size */
+      flex: 1 1 40px;
+      max-width: 12vw;
+      min-width: 30px;
+      font-size: 4vw;
       text-align: center;
       padding: 8px 0;
       background: #2c3e50;
@@ -200,8 +200,8 @@
     .letter-box.found {
       background: #27ae60;
       color: #fff;
-}
     }
+    
   </style>
 </head>
 <body>
