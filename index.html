@@ -439,38 +439,32 @@
 
   function renderLetters() {
     tagList.innerHTML = "";
-    Object.entries(LETTERS).forEach(([tagId, letter]) => {
-      const div = document.createElement("div");
-      div.className = "tag";
-      div.id = `tag-${tagId}`;
+  
+    const board = document.createElement("div");
+    board.className = "letter-board";
+  
+    const villainName = LETTER_MODE.villain;
+    const tags = Object.entries(LETTER_MODE.letters);
+  
+    // For each letter
+    tags.forEach(([tagId, letter], index) => {
+      const box = document.createElement("div");
+      box.className = "letter-box";
+      box.id = `tag-${tagId}`;
   
       if (foundLetters[tagId]) {
-        div.classList.add("found");
-        div.textContent = `🕵️ Found Letter: ${foundLetters[tagId]}`;
-      } else if (letter) {
-        div.textContent = "🔎 Letter hidden";
+        box.textContent = letter;
+        box.classList.add("found");
       } else {
-        div.textContent = "❌ No letter here";
+        box.textContent = "_";
       }
   
-      tagList.appendChild(div);
+      board.appendChild(box);
     });
   
-    const totalLetters = Object.values(LETTERS).filter(l => l).length;
-    const collected = Object.values(foundLetters).filter(l => l).length;
+    tagList.appendChild(board);
   
-    if (collected === totalLetters) {
-      const word = Object.values(LETTERS)
-        .map((_, i) => foundLetters[`tag${i + 1}`] || "_")
-        .join("");
-  
-      message.textContent = `You've found all the letters! The villain is: ${word}`;
-      prize.style.display = "block";
-      prize.innerHTML = `<strong>Case Cracked</strong><br />You've revealed the name: ${word} 🎉`;
-    } else {
-      message.textContent = `Progress: ${collected} of ${totalLetters} letters found.`;
-      prize.style.display = "none";
-    }
+    updateLetterMessage();
   }
 
   // Update message & prize in riddles mode
