@@ -562,7 +562,7 @@
     if (!allFound) {
       input.disabled = true;
       button.disabled = true;
-      feedback.textContent = "Find all letters to unlock the guess input.";
+      feedback.textContent = "Find all letters to enter a guess.";
       feedback.style.color = "gray";
     }
   
@@ -642,7 +642,7 @@
       modeToggle.textContent = "Switch to Letter Mode";
       renderRiddles();
     } else {
-      description.textContent = "Scan tags to collect secret letters and reveal the hidden villain.";
+      description.textContent = "Scan tags to collect secret letters. Unscramble the letters to reveal the hidden villain.";
       modeToggle.textContent = "Switch to Villain Mode";
       renderLetters();
     }
