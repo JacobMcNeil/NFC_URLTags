@@ -509,7 +509,6 @@
   function renderLetters() {
     tagList.innerHTML = "";
   
-    // Create letter board container
     const board = document.createElement("div");
     board.className = "letter-board";
   
@@ -530,38 +529,48 @@
   
     tagList.appendChild(board);
   
+    // Check if all 9 tags are found
+    const allFound = Object.keys(LETTERS).every(tagId => foundLetters[tagId]);
+  
     // Create guess input container
     const guessContainer = document.createElement("div");
     guessContainer.className = "letter-guess-container";
   
-    // Create input box
+    // Input box
     const input = document.createElement("input");
     input.type = "text";
     input.id = "guess-input";
     input.placeholder = "Type your guess here";
   
-    // Create guess button
+    // Guess button
     const button = document.createElement("button");
     button.id = "guess-button";
     button.textContent = "Guess";
   
-    // Create feedback paragraph
+    // Feedback paragraph
     const feedback = document.createElement("p");
     feedback.id = "guess-feedback";
   
-    // Append input, button, and feedback to guessContainer
+    // Disable input and button if not all letters found
+    if (!allFound) {
+      input.disabled = true;
+      button.disabled = true;
+      feedback.textContent = "Find all letters to unlock the guess input.";
+      feedback.style.color = "gray";
+    }
+  
     guessContainer.appendChild(input);
     guessContainer.appendChild(button);
     guessContainer.appendChild(feedback);
   
-    // Append guessContainer below the letter board
     tagList.appendChild(guessContainer);
   
     updateLetterMessage();
   
-    // Add event listener for the guess button here, or in your main JS after renderLetters runs
     button.addEventListener("click", () => {
-      const villainName = "scarecrow"; // Replace this with your actual villain name or a dynamic value
+      if (!allFound) return; // Just in case
+  
+      const villainName = "scarecrow"; // Replace with your villain's name or variable
       const userGuess = input.value.trim().toLowerCase();
   
       if (!userGuess) {
@@ -569,6 +578,17 @@
         feedback.style.color = "orange";
         return;
       }
+  
+      if (userGuess === villainName.toLowerCase()) {
+        feedback.textContent = "🎉 Correct! You unscrambled the villain!";
+        feedback.style.color = "#27ae60";
+      } else {
+        feedback.textContent = "❌ Nope, try again.";
+        feedback.style.color = "#e74c3c";
+      }
+    });
+  }
+
   
       if (userGuess === villainName.toLowerCase()) {
         feedback.textContent = "🎉 Correct! You unscrambled the villain!";
