@@ -345,6 +345,13 @@
   let foundVillains = {};
   let foundRiddles = {};
   let foundLetters = {};
+  let letterGuessSolved = false;
+
+  try {
+    letterGuessSolved = JSON.parse(localStorage.getItem("letterGuessSolved")) || false;
+  } catch {
+    letterGuessSolved = false;
+  }
 
   // Load from localStorage safely
   try {
@@ -582,6 +589,10 @@
       if (userGuess === villainName.toLowerCase()) {
         feedback.textContent = "🎉 Correct! You unscrambled the villain!";
         feedback.style.color = "#27ae60";
+        letterGuessSolved = true;
+        localStorage.setItem("letterGuessSolved", JSON.stringify(true));
+
+        updateLetterMessage();
       } else {
         feedback.textContent = "❌ Nope, try again.";
         feedback.style.color = "#e74c3c";
@@ -592,10 +603,10 @@
     const total = Object.keys(LETTERS).length;
     const foundCount = Object.keys(foundLetters).length;
   
-    if (foundCount === total) {
+    if (letterGuessSolved) {
       message.textContent = "You've revealed the secret villain!";
       prize.style.display = "block";
-      prize.innerHTML = `<strong>Mission Complete</strong><br />The villain is SCarecrow! 🎉`;
+      prize.innerHTML = `<strong>Mission Complete</strong><br />The villain is Scarecrow! 🎉`;
     } else {
       message.textContent = `Progress: ${foundCount} of ${total} letters found.`;
       prize.style.display = "none";
