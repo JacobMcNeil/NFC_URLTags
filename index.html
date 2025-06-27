@@ -175,26 +175,32 @@
       }
     }
     .letter-board {
-      display: flex;      /* horizontal layout by default */
-      gap: 8px;           /* space between letters */
-      justify-content: center;  /* center the letters horizontally */
-      align-items: center;      /* vertical align letters */
+      display: flex;
+      flex-wrap: wrap;          /* wrap on small screens */
+      gap: 6px;
+      justify-content: center;
+      padding: 0 10px;
+      overflow-x: hidden;
     }
     
     .letter-box {
+      flex: 1 1 40px;           /* flexible width with base 40px */
+      max-width: 12vw;          /* max width relative to viewport */
+      min-width: 30px;          /* don't shrink too small */
+      font-size: 4vw;           /* font scales on screen size */
+      text-align: center;
+      padding: 8px 0;
       background: #2c3e50;
       color: #f1c40f;
-      font-size: 2em;
-      padding: 10px 16px;
       border-radius: 8px;
-      min-width: 40px;
-      text-align: center;
+      box-sizing: border-box;
       box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
     }
     
     .letter-box.found {
       background: #27ae60;
       color: #fff;
+}
     }
   </style>
 </head>
