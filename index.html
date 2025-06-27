@@ -462,6 +462,19 @@
   
     updateLetterMessage();
   }
+  function updateLetterMessage() {
+    const total = Object.keys(LETTERS).length;
+    const foundCount = Object.keys(foundLetters).length;
+  
+    if (foundCount === total) {
+      message.textContent = "You've revealed the secret villain!";
+      prize.style.display = "block";
+      prize.innerHTML = `<strong>Mission Complete</strong><br />The villain is SCarecrow! 🎉`;
+    } else {
+      message.textContent = `Progress: ${foundCount} of ${total} letters found.`;
+      prize.style.display = "none";
+    }
+  }
 
   // Update message & prize in riddles mode
   function updateMessageAndPrize() {
