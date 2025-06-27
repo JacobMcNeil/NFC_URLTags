@@ -174,9 +174,27 @@
         min-width: auto;
       }
     }
-    #letters {
-      display: flex;
-      gap: 8px;
+    .letter-board {
+      display: flex;      /* horizontal layout by default */
+      gap: 8px;           /* space between letters */
+      justify-content: center;  /* center the letters horizontally */
+      align-items: center;      /* vertical align letters */
+    }
+    
+    .letter-box {
+      background: #2c3e50;
+      color: #f1c40f;
+      font-size: 2em;
+      padding: 10px 16px;
+      border-radius: 8px;
+      min-width: 40px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    }
+    
+    .letter-box.found {
+      background: #27ae60;
+      color: #fff;
     }
   </style>
 </head>
