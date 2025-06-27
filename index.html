@@ -588,17 +588,6 @@
       }
     });
   }
-
-  
-      if (userGuess === villainName.toLowerCase()) {
-        feedback.textContent = "🎉 Correct! You unscrambled the villain!";
-        feedback.style.color = "#27ae60"; // green
-      } else {
-        feedback.textContent = "❌ Nope, try again.";
-        feedback.style.color = "#e74c3c"; // red
-      }
-    });
-  }
   function updateLetterMessage() {
     const total = Object.keys(LETTERS).length;
     const foundCount = Object.keys(foundLetters).length;
