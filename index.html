@@ -443,11 +443,7 @@
     const board = document.createElement("div");
     board.className = "letter-board";
   
-    //const villainName = LETTER_MODE.villain;
-    const tags = Object.entries(LETTERS.letters);
-  
-    // For each letter
-    tags.forEach(([tagId, letter], index) => {
+    Object.entries(LETTERS).forEach(([tagId, letter]) => {
       const box = document.createElement("div");
       box.className = "letter-box";
       box.id = `tag-${tagId}`;
