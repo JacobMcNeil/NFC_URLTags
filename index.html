@@ -139,9 +139,9 @@
     #modeToggle:hover {
       background: #3e5871;
     }
-    #modeToggle {
-      display: none;
-    }
+    //#modeToggle {
+     // display: none;
+    //}
     #scrollIndicator {
       position: fixed;
       bottom: 15px;
@@ -375,7 +375,7 @@
     foundLetters = {};
   }
   let currentMode = localStorage.getItem("batmanMode") || "villains";
-  currentMode = "riddles"
+  //currentMode = "riddles"
 
   // Update state with current tag depending on mode
   function updateFound() {
